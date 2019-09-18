@@ -23,21 +23,46 @@ class customPin: NSObject, MKAnnotation {
 
 class ViewController: UIViewController, MKMapViewDelegate {
 
+    
     @IBOutlet weak var mapView: MKMapView!
+
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-
-        let sourceLocation = CLLocationCoordinate2D(latitude: 40.6602, longitude: -73.9690)
-        let destinationLocation = CLLocationCoordinate2D(latitude: 40.7061, longitude: -73.9969)
+        let sourceLocation = getSourceLocation()
+        let destinationLocation = getDestinationLocation()
         
         let sourcePin = customPin(pinTitle: "Prospect Park", pinSubTitle: "", location: sourceLocation)
         let destinationPin = customPin(pinTitle: "Brooklyn Bridge", pinSubTitle: "", location: destinationLocation)
         self.mapView.addAnnotation(sourcePin)
         self.mapView.addAnnotation(destinationPin)
         
-        let sourcePlaceMark = MKPlacemark(coordinate: sourceLocation)
-        let destinationPlaceMark = MKPlacemark(coordinate: destinationLocation)
+    }
+    
+    func getSourceLocation() ->CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: 40.6602, longitude: -73.9690)
+    }
+    
+    func getDestinationLocation() -> CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: 40.7061, longitude: -73.9969)
+    }
+    
+    
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer{
+        let renderer = MKPolylineRenderer(overlay: overlay)
+        renderer.strokeColor = UIColor.blue
+        renderer.lineWidth = 4.0
+        return renderer
+    }
+    
+    
+    
+    @IBAction func showRoute(_ sender: Any) {
+        let sourcePlaceMark = MKPlacemark(coordinate: getSourceLocation())
+        let destinationPlaceMark = MKPlacemark(coordinate: getDestinationLocation())
         
         let directionRequest = MKDirections.Request()
         directionRequest.source = MKMapItem(placemark: sourcePlaceMark)
@@ -62,12 +87,20 @@ class ViewController: UIViewController, MKMapViewDelegate {
         self.mapView.delegate = self
     }
     
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer{
-        let renderer = MKPolylineRenderer(overlay: overlay)
-        renderer.strokeColor = UIColor.blue
-        renderer.lineWidth = 4.0
-        return renderer
-    }
+    
+    
+//    func mapSetup() {
+//        self.mapView.mapType = .hybridFlyover
+//        self.mapView.showsBuildings = true
+//        self.mapView.isZoomEnabled = true
+//        self.mapView.isScrollEnabled = true
+//
+//        let camera = FlyoverCamera(mapView: self.mapView, configuration: FlyoverCamera.Configuration(duration: 6.0, altitude: 40000, pitch: 45.0, headingStep: 40.0))
+//        camera.start(flyover: FlyoverAwesomePlace.newYork)
+//        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(100), execute:{
+//            camera.stop()
+//        })
+//    }
 
 
 }
