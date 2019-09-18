@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import FlyoverKit
 
 class customPin: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
@@ -31,6 +32,8 @@ class ViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.mapSetup()
+        
         let sourceLocation = getSourceLocation()
         let destinationLocation = getDestinationLocation()
         
@@ -89,18 +92,18 @@ class ViewController: UIViewController, MKMapViewDelegate {
     
     
     
-//    func mapSetup() {
-//        self.mapView.mapType = .hybridFlyover
-//        self.mapView.showsBuildings = true
-//        self.mapView.isZoomEnabled = true
-//        self.mapView.isScrollEnabled = true
-//
-//        let camera = FlyoverCamera(mapView: self.mapView, configuration: FlyoverCamera.Configuration(duration: 6.0, altitude: 40000, pitch: 45.0, headingStep: 40.0))
-//        camera.start(flyover: FlyoverAwesomePlace.newYork)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(100), execute:{
-//            camera.stop()
-//        })
-//    }
+    func mapSetup() {
+        self.mapView.mapType = .hybridFlyover
+        self.mapView.showsBuildings = true
+        self.mapView.isZoomEnabled = true
+        self.mapView.isScrollEnabled = true
+
+        let camera = FlyoverCamera(mapView: self.mapView, configuration: FlyoverCamera.Configuration(duration: 6.0, altitude: 40000, pitch: 45.0, headingStep: 40.0))
+        camera.start(flyover: FlyoverAwesomePlace.newYork)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(100), execute:{
+            camera.stop()
+        })
+    }
 
 
 }
